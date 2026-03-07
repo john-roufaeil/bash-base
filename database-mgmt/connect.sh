@@ -5,7 +5,7 @@
 dbname="$1"
 
 if [[ -z "$dbname" ]]; then
-	error "Usage: connect <database_name>"
+  error "Usage: connect <database_name>"
   return 1
 fi
 
@@ -18,8 +18,8 @@ if ! validate_identifier "$dbname"; then
 fi
 
 if [[ ! -d "data/$dbname" ]]; then
-	error "Database '$dbname' not found."
-	return 1
+  error "Database '$dbname' not found."
+  return 1
 fi
 
 export CURRENT_DB="$dbname"

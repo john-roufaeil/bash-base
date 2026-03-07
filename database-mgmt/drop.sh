@@ -4,16 +4,16 @@
 dbname="$1"
 
 if [[ -z "$dbname" ]]; then
-    error "No database name provided."
-    exit 1
+  error "No database name provided."
+  exit 1
 fi
 
 # substitute space for underscore
 dbname="${dbname// /_}"
 
 if ! validate_identifier "$dbname"; then
-    error "Not a valid identifier"
-    exit 1
+  error "Not a valid identifier"
+  exit 1
 fi
 
 if [[ ! -d "data/$dbname" ]]; then

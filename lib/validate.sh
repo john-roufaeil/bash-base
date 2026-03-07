@@ -61,11 +61,11 @@ unescape_string() {
 }
 
 strip_quotes() {
-    local val="$1"
-    # Remove leading/trailing ' or "
-    val="${val#[\"\']}"
-    val="${val%[\"\']}"
-    echo -n "$val"
+  local val="$1"
+  # Remove leading/trailing ' or "
+  val="${val#[\"\']}"
+  val="${val%[\"\']}"
+  echo -n "$val"
 }
 
 export -f validate_type

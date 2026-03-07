@@ -4,7 +4,7 @@
 dbname="$1"
 
 if [[ -z "$dbname" ]]; then
-	error "Usage: create <database_name>"
+  error "Usage: create <database_name>"
   exit 1
 fi
 
