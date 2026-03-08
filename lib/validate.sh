@@ -30,6 +30,23 @@ function validate_type() {
   esac
 }
 
+validate_pk() {
+  local value="$1"
+  local tablePath="$2"
+
+  if [[ ! -f "$tablePath" ]]; then
+    return 0
+  fi
+
+  while IFS="|" read -r pk _; do
+    if [[ "$pk" == "$value" ]]; then
+      return 1
+    fi
+  done < "$tablePath"
+
+  return 0
+}
+
 validate_identifier() {
   local id="$1"
   # Only allow letters, numbers, and underscores; must start with a letter
@@ -72,6 +89,7 @@ strip_quotes() {
 }
 
 export -f validate_type
+export -f validate_pk
 export -f validate_identifier
 export -f escape_string
 export -f unescape_string
