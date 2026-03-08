@@ -14,7 +14,9 @@ show_db_menu() {
       "Drop Table")
         ;;
       "Insert into Table")
-        ./entry-mgmt/insert.sh
+        source ./entry-mgmt/insert.sh
+        read -n 1 -p "Press enter to return to menu"
+        clear
         ;;
       "Select From Table")
         ./entry-mgmt/select.sh

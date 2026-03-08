@@ -21,7 +21,8 @@ fi
 
 clear
 success "Inserting into table '$TABLE' in database '$CURRENT_DB'\n"
-
+info "Type 'back!' to cancel"
+printf "\n"
 # 2. Construct new entry: read metadata, prompt for input, validate types
 newEntry=""
 
@@ -30,11 +31,14 @@ colIdx=0
 while IFS="|" read -r colName colType; do
   ((colIdx++))
   while true; do
-    read -r -p "Enter '$colName' ($colType): " value < /dev/tty # Read from terminal
-    if validate_type "$value" "$colType"; then
-      newEntry+="$value|"
-      break
-    else
+    read -r -p "Enter '$colName' ($colType) : " value < /dev/tty # Read from terminal
+    
+    if [[ "$value" == "back!" ]]; then
+      warn "Insertion cancelled. Returning to database menu."
+      return
+    fi
+
+    if ! validate_type "$value" "$colType"; then
       error "Invalid value for type '$colType'. Please try again."
       continue
     fi
@@ -56,4 +60,5 @@ newEntry=$(echo "$newEntry" | sed 's/|$/\n/') # Substitute last pipe with newlin
 existingData=$(cat "$DB_PATH/$TABLE")
 echo -n -e "$existingData\n$newEntry\n" > "$DB_PATH/$TABLE"
 success "Entry inserted successfully!"
-exit 0
+return
+
