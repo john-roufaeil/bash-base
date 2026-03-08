@@ -1,24 +1,48 @@
 #!/bin/bash
 
-if [[ $# -ne 1 ]]; then
-  printf "Insertion error.\nUsage: %s <database_name>\n" "$0"
-  exit 1
+source lib/helpers.sh
+source ./table-mgmt/choose.sh
+
+# 1. Check DB & Table are selected & exist
+if [[ -z "$CURRENT_DB" ]]; then
+  error "No database selected."
+  exit
 fi
-databaseName=$1
 
-# Choose table to insert into
-counter=1
-tableNames=$(ls) # Placeholder: replace with actual command to list tables in the database
+if [[ -z "$TABLE" ]]; then
+  error "No table selected."
+  exit
+fi
+
+if [[ ! -f "$DB_PATH/$TABLE" || ! -f "$DB_PATH/.$TABLE" ]]; then
+  error "Table '$TABLE' not found in database '$CURRENT_DB'."
+  exit
+fi
+
 clear
-printf "Available tables in database '%s':\n" "$databaseName"
-for table in $tableNames; do
-  printf "%i) %s\n" "$counter" "$table"
-  ((counter++))
-done
+success "Inserting into table '$TABLE' in database '$CURRENT_DB'\n"
 
-printf "\n"
-read -p "Please choose a table to insert data into: " tableName
+# 2. Construct new entry: read metadata, prompt for input, validate types
+newEntry=""
 
-# Fetch metadata for the chosen table
-# Loop through columns, prompt for input & validate
-# Insert data into the table
+# Outer loop reads metadata file lines
+while IFS="|" read -r colName colType; do
+  while true; do
+    read -r -p "Enter '$colName' ($colType): " value < /dev/tty # Read from terminal
+    if validate_type "$value" "$colType"; then
+      newEntry+="$value|"
+      break
+    else
+      error "Invalid value for type '$colType'. Please try again."
+    fi
+  done
+done < "$DB_PATH/.$TABLE"
+
+newEntry=$(echo "$newEntry" | sed 's/|$/\n/') # Substitute last pipe with newline
+
+
+# 3. Append new entry to the table file
+existingData=$(cat "$DB_PATH/$TABLE")
+echo -n -e "$existingData\n$newEntry" > "$DB_PATH/$TABLE"
+success "Entry inserted successfully!"
+exit 0
