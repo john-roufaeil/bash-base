@@ -19,7 +19,9 @@ show_db_menu() {
         clear
         ;;
       "Select From Table")
-        ./entry-mgmt/select.sh
+        source ./entry-mgmt/select.sh
+        read -n 1 -p "Press enter to return to menu"
+        clear
         ;;
       "Delete From Table")
         source ./entry-mgmt/delete.sh
@@ -27,7 +29,9 @@ show_db_menu() {
         clear
         ;;
       "Update Table")
-        ./entry-mgmt/update.sh
+        source ./entry-mgmt/update.sh
+        read -n 1 -p "Press enter to return to menu"
+        clear
         ;;
       "Exit")
         break
