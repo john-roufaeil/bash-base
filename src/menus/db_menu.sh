@@ -3,7 +3,7 @@
 
 show_db_menu() {
   PS3="$CURRENT_DB> "
-  options=("Create Table" "List Tables" "Drop Table" "Insert into Table" "Select From Table" "Delete From Table" "Update Table" "Exit")
+  options=("Create Table" "List Tables" "Drop Table" "Insert into Table" "Select From Table" "Delete From Table" "Update Table" "Back to Main Menu")
 
   select opt in "${options[@]}"; do
     case $opt in
@@ -14,7 +14,7 @@ show_db_menu() {
       "Select From Table")  source ./entry-mgmt/select.sh ;;
       "Delete From Table")  source ./entry-mgmt/delete.sh ;;
       "Update Table")       source ./entry-mgmt/update.sh ;;
-      "Exit")               break ;;
+      "Back to Main Menu")               break ;;
       *)                    error "Invalid option $REPLY" ;;
     esac
     read -r -n 1 -p "Press enter to return to menu"

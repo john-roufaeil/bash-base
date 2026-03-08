@@ -1,6 +1,6 @@
 #!/bin/bash
 
-./table-mgmt/list.sh
+source ./table-mgmt/list.sh
 read -r -p "Enter table name: " tableName
 export TABLE="$tableName"
 

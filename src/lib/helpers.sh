@@ -1,13 +1,13 @@
 #!/bin/bash
 
-export RESET='\033[0m'
-export GRN='\033[0;32m'
-export RED='\033[0;31m'
-export YLW='\033[0;33m'
-export WHT='\033[0;1m'
+RESET=$'\033[0m'
+GRN=$'\033[0;32m'
+RED=$'\033[0;31m'
+YLW=$'\033[0;33m'
+WHT=$'\033[0;1m'
 
 # Internal helper: printclr "message" "color_code"
-printclr() { printf "${2}* %s ${RESET}\n" "$1"; }
+printclr() { printf "%s* %s %s\n" "$2" "$1" "$RESET"; }
 
 # Wrappers
 success() { printclr "$1" "$GRN"; }

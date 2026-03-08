@@ -11,17 +11,17 @@ show_main_menu() {
     case $opt in
       "Create Database")
         read -r -p "Enter Database Name: " dbname
-        ./database-mgmt/create.sh "$dbname"
+        source ./database-mgmt/create.sh "$dbname"
         ;;
       "Drop Database")
         read -r -p "Enter Database Name to DROP: " dbname
-        ./database-mgmt/drop.sh "$dbname"
+        source ./database-mgmt/drop.sh "$dbname"
         ;;
       "List Databases")
-        ./database-mgmt/list.sh
+        source ./database-mgmt/list.sh
         ;;
       "Connect to Database")
-        ./database-mgmt/list.sh
+        source ./database-mgmt/list.sh
         read -r -p "Enter Database Name: " dbname
         source ./database-mgmt/connect.sh "$dbname"
         ;;
