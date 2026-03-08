@@ -20,5 +20,6 @@ if [[ ! -f "$DB_PATH/$TABLE" || ! -f "$DB_PATH/.$TABLE" ]]; then
 fi
 
 clear
-success "Table '$TABLE' in database '$CURRENT_DB'\n"
-info "Type 'back!' to cancel\n"
+success "Table '$TABLE' in database '$CURRENT_DB'"
+info "Type 'back!' to cancel"
+printf "\n"
