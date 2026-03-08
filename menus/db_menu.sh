@@ -7,30 +7,36 @@ show_db_menu() {
   select opt in "${options[@]}"; do
     case $opt in
       "Create Table")
+        source ./table-mgmt/create.sh
+        read -r -n 1 -p "Press enter to return to menu"
+        clear
         ;;
       "List Tables")
         ./table-mgmt/list.sh
         ;;
       "Drop Table")
+        source ./table-mgmt/drop.sh
+        read -r -n 1 -p "Press enter to return to menu"
+        clear
         ;;
       "Insert into Table")
         source ./entry-mgmt/insert.sh
-        read -n 1 -p "Press enter to return to menu"
+        read -r -n 1 -p "Press enter to return to menu"
         clear
         ;;
       "Select From Table")
         source ./entry-mgmt/select.sh
-        read -n 1 -p "Press enter to return to menu"
+        read -r -n 1 -p "Press enter to return to menu"
         clear
         ;;
       "Delete From Table")
         source ./entry-mgmt/delete.sh
-        read -n 1 -p "Press enter to return to menu"
+        read -r -n 1 -p "Press enter to return to menu"
         clear
         ;;
       "Update Table")
         source ./entry-mgmt/update.sh
-        read -n 1 -p "Press enter to return to menu"
+        read -r -n 1 -p "Press enter to return to menu"
         clear
         ;;
       "Exit")
@@ -40,5 +46,6 @@ show_db_menu() {
         error "Invalid option $REPLY"
         ;;
     esac
+    PS3="$CURRENT_DB> "
   done
 }
