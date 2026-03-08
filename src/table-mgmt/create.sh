@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 if [[ -z "$CURRENT_DB" ]]; then
   error "No database selected."
   return 1

@@ -44,7 +44,7 @@ if [[ ! -x "menus/main_menu.sh" ]]; then
 fi
 
 # 5. Normal Execution Flow
-mkdir -p data
+mkdir -p ../data
 clear
 info "Welcome to Bash-Base DBMS"
 

@@ -9,8 +9,8 @@ cd "$PROJECT_ROOT" || exit 1
 source lib/helpers.sh
 source lib/validate.sh
 
-TEST_CASES="tests/test_cases.sh"
-TEST_META="tests/test_meta.txt"
+TEST_CASES="../tests/test_cases.sh"
+TEST_META="../tests/test_meta.txt"
 
 passed=0
 failed=0

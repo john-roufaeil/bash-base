@@ -22,7 +22,7 @@ clear
 success "Viewing table '$TABLE' in database '$CURRENT_DB'\n"
 
 columns=()
-while IFS="|" read -r colName; do
+while IFS="|" read -r colName _; do
     columns+=("$colName")
 done < "$DB_PATH/.$TABLE"
 

@@ -16,9 +16,9 @@ if ! validate_identifier "$dbname"; then
   exit 1
 fi
 
-if [[ -d "data/$dbname" ]]; then
+if [[ -d "../data/$dbname" ]]; then
   warn "Database '$dbname' already exists."
   exit 1
 fi
 
-mkdir -p "data/$dbname" && success "Database '$dbname' created."
+mkdir -p "../data/$dbname" && success "Database '$dbname' created."
