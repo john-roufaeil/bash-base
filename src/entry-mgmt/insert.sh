@@ -5,12 +5,12 @@ source ./table-mgmt/choose.sh
 
 # 2. Construct new entry: read metadata, prompt for input, validate types
 newEntry=""
-
 # Outer loop reads metadata file lines
 while IFS="|" read -r colName colType; do
-  while true; do
-    read -r -p "Enter '$colName' ($colType) : " value < /dev/tty # Read from terminal
-    
+  value=""
+  while ! validate_type "$value" "$colType" || ! validate_pk "$value" "$DB_PATH/$TABLE"; do
+    read -r -p "Enter '$colName' ($colType) : " value < /dev/tty
+
     if [[ "$value" == "back!" ]]; then
       warn "Insertion cancelled. Returning to database menu."
       return
@@ -25,10 +25,8 @@ while IFS="|" read -r colName colType; do
       error "Primary key '$value' already exists. Please try again."
       continue
     fi
-
-    newEntry+="$value|"
-    break
   done
+  newEntry+="$value|"
 done < "$DB_PATH/.$TABLE"
 
 newEntry=$(printf "%s" "$newEntry" | sed 's/|$/\n/') # Substitute last pipe with newline
