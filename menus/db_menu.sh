@@ -22,7 +22,9 @@ show_db_menu() {
         ./entry-mgmt/select.sh
         ;;
       "Delete From Table")
-        ./entry-mgmt/delete.sh
+        source ./entry-mgmt/delete.sh
+        read -n 1 -p "Press enter to return to menu"
+        clear
         ;;
       "Update Table")
         ./entry-mgmt/update.sh
