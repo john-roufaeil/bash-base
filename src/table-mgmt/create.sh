@@ -36,8 +36,8 @@ for (( i=1; i<="$colCount"; i++ )); do
     return 1
   fi
 
-  echo "  Select Type for '$colName':"
-  echo "  1) int   2) float   3) string   4) bool   5) date   6) email"
+  printf "  Select Type for '%s':\n" "$colName"
+  printf "  1) int   2) float   3) string   4) bool   5) date   6) email"
   read -r -p "  Choice [1-6]: " typeChoice
   
   case $typeChoice in

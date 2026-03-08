@@ -27,11 +27,11 @@ case "$1" in
     exit 0
     ;;
   -h|--help)
-    echo "Usage: ./main.sh [options]"
-    echo "Options:"
-    echo "  -x, --allow-excute   Allow excute permissions on the scripts"
-    echo "  -t, --test           Run the validation test suite"
-    echo "  -h, --help           Show this help message"
+    printf "Usage: ./main.sh [options]"
+    printf "Options:"
+    printf "  -x, --allow-excute   Allow excute permissions on the scripts"
+    printf "  -t, --test           Run the validation test suite"
+    printf "  -h, --help           Show this help message"
     exit 0
     ;;
 esac

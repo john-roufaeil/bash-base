@@ -25,7 +25,7 @@ print_separator() {
     for w in "${colWidths[@]}"; do
         printf "+-%-${w}s" "$(printf '%.0s-' $(seq 1 $w))"
     done
-    echo "+"
+    printf "+"
 }
 
 # Print header
@@ -33,7 +33,7 @@ print_separator
 for i in "${!columns[@]}"; do
     printf "| %-${colWidths[i]}s" "${columns[i]}"
 done
-echo "|"
+printf "|"
 print_separator
 
 # Print rows
@@ -41,7 +41,7 @@ while IFS="|" read -r -a row; do
     for i in "${!columns[@]}"; do
         printf "| %-${colWidths[i]}s" "${row[i]}"
     done
-    echo "|"
+    printf "|"
 done < "$DB_PATH/$TABLE"
 
 print_separator

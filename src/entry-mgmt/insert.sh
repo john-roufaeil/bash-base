@@ -31,14 +31,15 @@ while IFS="|" read -r colName colType; do
   done
 done < "$DB_PATH/.$TABLE"
 
-newEntry=$(echo "$newEntry" | sed 's/|$/\n/') # Substitute last pipe with newline
+newEntry=$(printf "%s" "$newEntry" | sed 's/|$/\n/') # Substitute last pipe with newline
 
 # 3. Append new entry to the table file
 existingData=$(cat "$DB_PATH/$TABLE")
 if [[ -z "$existingData" ]]; then
-  echo -n -e "$newEntry\n" > "$DB_PATH/$TABLE"
+  printf "%s\n" "$newEntry" > "$DB_PATH/$TABLE"
 else
-  echo -n -e "$existingData\n$newEntry\n" > "$DB_PATH/$TABLE"
+  printf "%s\n" "$existingData" > "$DB_PATH/$TABLE"
+  printf "%s\n" "$newEntry" >> "$DB_PATH/$TABLE"
 fi
 success "Entry inserted successfully!"
 return

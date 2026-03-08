@@ -14,7 +14,7 @@ show_db_menu() {
       "Select From Table")  source ./entry-mgmt/select.sh ;;
       "Delete From Table")  source ./entry-mgmt/delete.sh ;;
       "Update Table")       source ./entry-mgmt/update.sh ;;
-      "Back to Main Menu")               break ;;
+      "Back to Main Menu")  break ;;
       *)                    error "Invalid option $REPLY" ;;
     esac
     read -r -n 1 -p "Press enter to return to menu"

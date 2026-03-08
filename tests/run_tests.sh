@@ -24,9 +24,9 @@ info "=== Starting Test Suite ==="
 while read -r cmd <&3 && IFS='|' read -r label expected err_msg <&4; do
   
   # 1. Clean up Tabs/Spaces: Use xargs to trim leading/trailing whitespace & tabs
-  label=$(echo "$label" | xargs)
-  expected=$(echo "$expected" | xargs)
-  err_msg=$(echo "$err_msg" | xargs)
+  label=$(printf "%s" "$label" | xargs)
+  expected=$(printf "%s" "$expected" | xargs)
+  err_msg=$(printf "%s" "$err_msg" | xargs)
 
   # 2. Execute the command
   # We use a subshell ( ) to prevent 'exit' calls in tests from killing the runner
@@ -50,7 +50,7 @@ done
 exec 3<&-
 exec 4<&-
 
-echo "--------------------------------"
+printf "--------------------------------"
 if [ $failed -eq 0 ]; then
   success "All $passed tests passed!"
 else
