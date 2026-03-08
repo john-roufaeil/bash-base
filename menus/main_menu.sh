@@ -1,11 +1,12 @@
 #!/bin/bash
 
 # TODO: I didn't add the ability to select with words yet, not sure aobut it
+PS_MAIN="DBMS-Main> "
 
 show_main_menu() {
-  PS3="DBMS-Main> "
+  PS3="$PS_MAIN"
   options=("Create Database" "Drop Database" "List Databases" "Connect to Database" "Exit")
-
+  
   select opt in "${options[@]}"; do
     case $opt in
       "Create Database")
@@ -32,5 +33,6 @@ show_main_menu() {
         error "Invalid option $REPLY"
         ;;
     esac
+    PS3="$PS_MAIN"
   done
 }
