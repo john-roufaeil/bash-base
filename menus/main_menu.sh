@@ -9,19 +9,19 @@ show_main_menu() {
   select opt in "${options[@]}"; do
     case $opt in
       "Create Database")
-        read -p -r "Enter Database Name: " dbname
+        read -r -p "Enter Database Name: " dbname
         ./database-mgmt/create.sh "$dbname"
         ;;
       "Drop Database")
-        read -p -r "Enter Database Name to DROP: " dbname
+        read -r -p "Enter Database Name to DROP: " dbname
         ./database-mgmt/drop.sh "$dbname"
         ;;
       "List Databases")
         ./database-mgmt/list.sh
         ;;
       "Connect to Database")
-        read -p  -r "Enter Database Name: " dbname
-        # source is important to pass context
+        ./database-mgmt/list.sh
+        read -r -p "Enter Database Name: " dbname
         source ./database-mgmt/connect.sh "$dbname"
         ;;
       "Exit")

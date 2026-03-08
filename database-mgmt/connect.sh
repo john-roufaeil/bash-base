@@ -23,5 +23,8 @@ if [[ ! -d "data/$dbname" ]]; then
 fi
 
 export CURRENT_DB="$dbname"
+export DB_PATH="data/$CURRENT_DB"
+clear
 success "Connected to $dbname"
 source menus/db_menu.sh
+show_db_menu

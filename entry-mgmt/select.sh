@@ -1,23 +1,68 @@
 #!/bin/bash
 
-if [[ $# -ne 1 ]]; then
-  printf "Selection error.\nUsage: %s <database_name>\n" "$0"
-  exit 1
-fi
-databaseName=$1
+source lib/helpers.sh
+source ./table-mgmt/choose.sh
 
-# Choose table to select from
-counter=1
-tableNames=$(ls) # Placeholder: replace with actual command to list tables in the database
+if [[ -z "$CURRENT_DB" ]]; then
+  error "No database selected."
+  return 1
+fi
+
+if [[ -z "$TABLE" ]]; then
+  error "No table selected."
+  return 1
+fi
+
+if [[ ! -f "$DB_PATH/$TABLE" || ! -f "$DB_PATH/.$TABLE" ]]; then
+  error "Table '$TABLE' not found in database '$CURRENT_DB'."
+  return 1
+fi
+
 clear
-printf "Available tables in database '%s':\n" "$databaseName"
-for table in $tableNames; do
-  printf "%i) %s\n" "$counter" "$table"
-  ((counter++))
+success "Viewing table '$TABLE' in database '$CURRENT_DB'\n"
+
+columns=()
+while IFS="|" read -r colName; do
+    columns+=("$colName")
+done < "$DB_PATH/.$TABLE"
+
+# Compute column widths for formatting
+# Initialize with column name lengths
+colWidths=()
+for col in "${columns[@]}"; do
+    colWidths+=("${#col}")
 done
 
-printf "\n"
-read -p "Please choose a table to select data from: " tableName
+# Update widths based on data
+while IFS="|" read -r -a row; do
+    for i in "${!row[@]}"; do
+        [[ ${#row[i]} -gt ${colWidths[i]} ]] && colWidths[i]=${#row[i]}
+    done
+done < "$DB_PATH/$TABLE"
 
-# Take filter options from user
-# Loop through rows and print
+print_separator() {
+    for w in "${colWidths[@]}"; do
+        printf "+-%-${w}s" "$(printf '%.0s-' $(seq 1 $w))"
+    done
+    echo "+"
+}
+
+# Print header
+print_separator
+for i in "${!columns[@]}"; do
+    printf "| %-${colWidths[i]}s" "${columns[i]}"
+done
+echo "|"
+print_separator
+
+# Print rows
+while IFS="|" read -r -a row; do
+    for i in "${!columns[@]}"; do
+        printf "| %-${colWidths[i]}s" "${row[i]}"
+    done
+    echo "|"
+done < "$DB_PATH/$TABLE"
+
+print_separator
+
+return
