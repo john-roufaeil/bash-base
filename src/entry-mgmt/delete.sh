@@ -8,23 +8,19 @@ if [[ ! -s "$DB_PATH/$TABLE" ]]; then
 fi
 
 pkToDelete=""
-while true; do
-    read -r -p "Enter primary key of the row to delete: " pk < /dev/tty
+while [[ -z "$pkToDelete" ]]; do
+  read -r -p "Enter primary key of the row to delete: " pk < /dev/tty
 
-    # Cancel option
-    if [[ "$pk" == "back!" ]]; then
-        warn "Deletion cancelled. Returning to database menu."
-        return
-    fi
+  if [[ "$pk" == "back!" ]]; then
+    warn "Deletion cancelled. Returning to database menu."
+    return
+  fi
 
-    # Check PK exists
-    if ! validate_pk "$pk" "$DB_PATH/$TABLE"; then
-      pkToDelete=$pk
-      break
-    else
-      error "Primary key not found. Please try again."
-      continue
-    fi
+  if ! validate_pk "$pk" "$DB_PATH/$TABLE"; then
+    pkToDelete=$pk
+  else
+    error "Primary key not found. Please try again."
+  fi
 done
 
 existingData=$(cat "$DB_PATH/$TABLE")
