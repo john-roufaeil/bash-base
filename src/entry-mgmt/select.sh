@@ -1,25 +1,6 @@
 #!/bin/bash
 
-source lib/helpers.sh
 source ./table-mgmt/choose.sh
-
-if [[ -z "$CURRENT_DB" ]]; then
-  error "No database selected."
-  return 1
-fi
-
-if [[ -z "$TABLE" ]]; then
-  error "No table selected."
-  return 1
-fi
-
-if [[ ! -f "$DB_PATH/$TABLE" || ! -f "$DB_PATH/.$TABLE" ]]; then
-  error "Table '$TABLE' not found in database '$CURRENT_DB'."
-  return 1
-fi
-
-clear
-success "Viewing table '$TABLE' in database '$CURRENT_DB'\n"
 
 columns=()
 while IFS="|" read -r colName _; do

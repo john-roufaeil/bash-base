@@ -1,28 +1,8 @@
 #!/bin/bash
 
-source lib/helpers.sh
+# 1. Choose table
 source ./table-mgmt/choose.sh
 
-# 1. Check DB & Table are selected & exist
-if [[ -z "$CURRENT_DB" ]]; then
-  error "No database selected."
-  exit
-fi
-
-if [[ -z "$TABLE" ]]; then
-  error "No table selected."
-  exit
-fi
-
-if [[ ! -f "$DB_PATH/$TABLE" || ! -f "$DB_PATH/.$TABLE" ]]; then
-  error "Table '$TABLE' not found in database '$CURRENT_DB'."
-  return 1
-fi
-
-clear
-success "Inserting into table '$TABLE' in database '$CURRENT_DB'\n"
-info "Type 'back!' to cancel"
-printf "\n"
 # 2. Construct new entry: read metadata, prompt for input, validate types
 newEntry=""
 
@@ -62,4 +42,3 @@ else
 fi
 success "Entry inserted successfully!"
 return
-

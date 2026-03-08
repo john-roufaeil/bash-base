@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC1091
 
 show_db_menu() {
   PS3="$CURRENT_DB> "
@@ -6,46 +7,19 @@ show_db_menu() {
 
   select opt in "${options[@]}"; do
     case $opt in
-      "Create Table")
-        source ./table-mgmt/create.sh
-        read -r -n 1 -p "Press enter to return to menu"
-        clear
-        ;;
-      "List Tables")
-        ./table-mgmt/list.sh
-        ;;
-      "Drop Table")
-        source ./table-mgmt/drop.sh
-        read -r -n 1 -p "Press enter to return to menu"
-        clear
-        ;;
-      "Insert into Table")
-        source ./entry-mgmt/insert.sh
-        read -r -n 1 -p "Press enter to return to menu"
-        clear
-        ;;
-      "Select From Table")
-        source ./entry-mgmt/select.sh
-        read -r -n 1 -p "Press enter to return to menu"
-        clear
-        ;;
-      "Delete From Table")
-        source ./entry-mgmt/delete.sh
-        read -r -n 1 -p "Press enter to return to menu"
-        clear
-        ;;
-      "Update Table")
-        source ./entry-mgmt/update.sh
-        read -r -n 1 -p "Press enter to return to menu"
-        clear
-        ;;
-      "Exit")
-        break
-        ;;
-      *) 
-        error "Invalid option $REPLY"
-        ;;
+      "Create Table")       source ./table-mgmt/create.sh ;;
+      "List Tables")        source ./table-mgmt/list.sh ;;
+      "Drop Table")         source ./table-mgmt/drop.sh ;;
+      "Insert into Table")  source ./entry-mgmt/insert.sh ;;
+      "Select From Table")  source ./entry-mgmt/select.sh ;;
+      "Delete From Table")  source ./entry-mgmt/delete.sh ;;
+      "Update Table")       source ./entry-mgmt/update.sh ;;
+      "Exit")               break ;;
+      *)                    error "Invalid option $REPLY" ;;
     esac
+    read -r -n 1 -p "Press enter to return to menu"
+    clear
+
     PS3="$CURRENT_DB> "
   done
 }

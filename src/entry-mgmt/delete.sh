@@ -1,27 +1,6 @@
 #!/bin/bash
 
-source lib/helpers.sh
 source ./table-mgmt/choose.sh
-
-if [[ -z "$CURRENT_DB" ]]; then
-  error "No database selected."
-  exit
-fi
-
-if [[ -z "$TABLE" ]]; then
-  error "No table selected."
-  exit
-fi
-
-if [[ ! -f "$DB_PATH/$TABLE" || ! -f "$DB_PATH/.$TABLE" ]]; then
-  error "Table '$TABLE' not found in database '$CURRENT_DB'."
-  return 1
-fi
-
-clear
-success "Deleting from table '$TABLE' in database '$CURRENT_DB'\n"
-info "Type 'back!' to cancel"
-printf "\n"
 
 if [[ ! -s "$DB_PATH/$TABLE" ]]; then
   warn "Table is empty. Nothing to delete."
