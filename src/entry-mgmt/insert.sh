@@ -26,10 +26,8 @@ printf "\n"
 # 2. Construct new entry: read metadata, prompt for input, validate types
 newEntry=""
 
-colIdx=0
 # Outer loop reads metadata file lines
 while IFS="|" read -r colName colType; do
-  ((colIdx++))
   while true; do
     read -r -p "Enter '$colName' ($colType) : " value < /dev/tty # Read from terminal
     
@@ -55,10 +53,13 @@ done < "$DB_PATH/.$TABLE"
 
 newEntry=$(echo "$newEntry" | sed 's/|$/\n/') # Substitute last pipe with newline
 
-
 # 3. Append new entry to the table file
 existingData=$(cat "$DB_PATH/$TABLE")
-echo -n -e "$existingData\n$newEntry\n" > "$DB_PATH/$TABLE"
+if [[ -z "$existingData" ]]; then
+  echo -n -e "$newEntry\n" > "$DB_PATH/$TABLE"
+else
+  echo -n -e "$existingData\n$newEntry\n" > "$DB_PATH/$TABLE"
+fi
 success "Entry inserted successfully!"
 return
 
