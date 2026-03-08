@@ -9,7 +9,7 @@ fi
 
 pkToDelete=""
 while [[ -z "$pkToDelete" ]]; do
-  read -r -p "Enter primary key of the row to delete: " pk < /dev/tty
+  read -r -p "Enter primary key of the row to delete: " pk
 
   if [[ "$pk" == "back!" ]]; then
     warn "Deletion cancelled. Returning to database menu."
