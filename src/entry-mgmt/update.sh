@@ -14,9 +14,6 @@ if [[ "$bypass" != "true" ]]; then
   elif validate_pk "$pk" "$CONNECTED_DB_PATH/$targetTable"; then
     error "PK not found."
     return 1
-  elif [[ "$col" == 1 ]]; then
-    error "Cannot update PK."
-    return 1
   elif ! [[ "$col" =~ ^[0-9]+$ ]] || [[ "$col" -lt 1 ]] || [[ "$col" -gt "$colCount" ]]; then
     error "Column out of range."
     return 1

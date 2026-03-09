@@ -13,8 +13,7 @@ while read -r line; do
   while [[ -z "$validatedVal" ]]; do
     read -r -p "Enter $colName ($colType): " input
 		if [[ "$input" == "back!" ]]; then
-		  info "Insertion cancelled."
-		  return 1
+		  info "Insertion cancelled."; return 1
     elif ! validate_type "$input" "$colType"; then
 		  error "Invalid type.";
     elif [[ "$colIndex" -eq 1 ]] && ! validate_pk "$input" "$CONNECTED_DB_PATH/$TABLE"; then

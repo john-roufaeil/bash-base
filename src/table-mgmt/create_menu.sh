@@ -8,8 +8,7 @@ colCount=""
 while [[ -z "$colCount" ]]; do
   read -r -p "Number of columns: " input
     if [[ "$input" == "back!" ]]; then 
-      info "Table creation cancelled"
-      return 1;
+      info "Table creation cancelled"; return 1
   elif [[ "$input" =~ ^[0-9]+$ ]] && [[ "$input" -gt 0 ]]; then
     colCount="$input"
   else
@@ -25,8 +24,7 @@ for (( i=1; i<="$colCount"; i++ )); do
   while [[ -z "$colName" ]]; do
     read -p "  Column Name: " input
     if [[ "$input" == "back!" ]]; then 
-      info "Table creation cancelled"
-      return 1;
+      info "Table creation cancelled"; return 1
     elif validate_identifier "$input"; then colName="$input";
     else error "Invalid column name."; fi
   done

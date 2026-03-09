@@ -15,6 +15,7 @@ function validate_type() {
   esac
 }
 
+# allowed to use the PK in the table
 validate_pk() {
   local value="$1"
   local tablePath="$2"

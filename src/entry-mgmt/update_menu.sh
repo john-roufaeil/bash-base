@@ -13,8 +13,7 @@ primaryKey=""
 while [[ -z "$primaryKey" ]]; do
 	read -r -p "Enter primary key of the row to update: " input
 	if [[ "$input" == "back!" ]]; then
-		info "Update cancelled."
-		return 1
+		info "Update cancelled."; return 1
 	elif ! validate_pk "$input" "$CONNECTED_DB_PATH/$TABLE"; then
 		primaryKey="$input"
 	else
@@ -34,9 +33,7 @@ while [[ -z "$colChoice" ]]; do
 	for i in "${!colNames[@]}"; do printf "%d: %s (%s)\n" "$((i+1))" "${colNames[$i]}" "${colTypes[$i]}"; done
 	read -r -p "Choice [1-${#colNames[@]}]: " input
 	if [[ "$input" == "back!" ]]; then
-		return
-	elif [[ "$input" == 1 ]]; then
-		error "Primary key cannot be updated."
+		info "Update cancelled."; return 1
 	elif ! [[ "$input" =~ ^[0-9]+$ ]] || [[ "$input" -lt 1 ]] || [[ "$input" -gt "${#colNames[@]}" ]]; then
 		error "Invalid choice."
 	else
@@ -48,11 +45,13 @@ newValue=""
 while [[ -z "$newValue" ]]; do
 	read -r -p "Enter new value: " input
 	if [[ "$input" == "back!" ]]; then
-		return
-	elif validate_type "$input" "${colTypes[$((colChoice-1))]}"; then
-		newValue="$input"
-	else
+		info "Update cancelled."; return 1
+	elif ! validate_type "$input" "${colTypes[$((colChoice-1))]}"; then
 		error "Invalid type."
+	elif [[ "$colChoice" -eq 1 ]] && ! validate_pk "$input" "$CONNECTED_DB_PATH/$TABLE" && [[ "$input" != "$primaryKey" ]]; then
+		error "Primary key '$input' already exists."
+	else
+		newValue="$input"
 	fi
 done
 
