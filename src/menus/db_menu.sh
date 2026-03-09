@@ -10,10 +10,10 @@ show_db_menu() {
       "Create Table")       source ./table-mgmt/create.sh ;;
       "List Tables")        source ./table-mgmt/list.sh ;;
       "Drop Table")         source ./table-mgmt/drop.sh ;;
-      "Insert into Table")  source ./entry-mgmt/insert.sh ;;
+      "Insert into Table")  source ./entry-mgmt/insert_menu.sh ;;
       "Select From Table")  source ./entry-mgmt/select.sh ;;
-      "Delete From Table")  source ./entry-mgmt/delete.sh ;;
-      "Update Table")       source ./entry-mgmt/update.sh ;;
+      "Delete From Table")  source ./entry-mgmt/delete_menu.sh ;;
+      "Update Table")       source ./entry-mgmt/update_menu.sh ;;
       "Back to Main Menu")  break ;;
       *)                    error "Invalid option $REPLY" ;;
     esac

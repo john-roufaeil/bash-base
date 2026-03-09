@@ -1,0 +1,24 @@
+#!/bin/bash
+source ./table-mgmt/choose.sh
+
+newRow=""
+colIndex=1
+while read -r line; do
+  colName=$(echo "$line" | cut -d'|' -f1)
+  colType=$(echo "$line" | cut -d'|' -f2)
+  validatedVal=""
+  while [[ -z "$validatedVal" ]]; do
+    read -r -p "Enter $colName ($colType): " input
+    if [[ "$input" == "back!" ]]; then return;
+    elif ! validate_type "$input" "$colType"; then error "Invalid type.";
+    elif [[ "$colIndex" -eq 1 ]] && ! validate_pk "$input" "$DB_PATH/$TABLE"; then error "PK exists.";
+    else
+      validatedVal="$input"
+    fi
+  done
+  newRow+="$validatedVal|"
+  ((colIndex++))
+done < "$DB_PATH/.$TABLE"
+
+newRow=$(echo "$newRow" | sed 's/|$//')
+bypass=true source ./entry-mgmt/insert.sh "$TABLE" "$newRow"
