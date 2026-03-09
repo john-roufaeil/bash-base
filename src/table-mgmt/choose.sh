@@ -15,7 +15,9 @@ while [[ -z "$tableName" ]]; do
     return 1
   elif ! validate_identifier "$input"; then
     error "Invalid table identifier."
-  elif [[ ! -f "$CONNECTED_DB_PATH/$input" || ! -f "$CONNECTED_DB_PATH/.$input" ]]; then
+  elif [[ $1 == "create" && (-f "$CONNECTED_DB_PATH/$input" || -f "$CONNECTED_DB_PATH/.$input") ]]; then
+    error "Table '$input' already exists. Try again."
+  elif [[ $1 != "create" && (! -f "$CONNECTED_DB_PATH/$input" || ! -f "$CONNECTED_DB_PATH/.$input") ]]; then
     error "Table '$input' does not exist. Try again."
   else
     tableName="$input"
