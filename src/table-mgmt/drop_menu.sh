@@ -4,12 +4,11 @@ if [[ $? -ne 0 ]]; then
   return 1
 fi
 
-warn "WARNING: You are about to permanently delete table '$TABLE' and all its data."
-read -r -p "Type 'CONFIRM' to proceed: " confirmation
-
-if [[ "$confirmation" != "CONFIRM" ]]; then
+warn "You are about to drop table '$TABLE' and all its data."
+read -r -p "Confirm? (y/n): " confirm
+if [[ "$confirm" != "y" ]]; then
   info "Table drop cancelled."
-  return 0
+  return 1
 fi
 
 bypass=true source ./table-mgmt/drop.sh "$TABLE"

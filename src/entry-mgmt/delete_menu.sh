@@ -27,13 +27,13 @@ header=$(awk -F'|' '{printf "%s|", $1}' "$CONNECTED_DB_PATH/.$TABLE" | sed 's/|$
 row=$(awk -v pk="$pkToDelete" -F'|' '$1 == pk' "$CONNECTED_DB_PATH/$TABLE")
 
 printf "\n"
-warn "Row to be deleted:"
+warn "You are about to delete this row."
 (printf "%s\n" "$header"; printf "%s\n" "$row") | column -t -s '|'
 printf "\n"
 
-read -r -p "Are you sure you want to delete this row? (y/n): " confirm < /dev/tty
+read -r -p "Confirm? (y/n): " confirm
 if [[ "$confirm" != "y" ]]; then
-  info "Deletion cancelled."
+  info "Row deletion cancelled."
   return 1
 fi
 

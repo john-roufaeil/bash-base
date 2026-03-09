@@ -13,4 +13,12 @@ if [[ -z "$dbname" ]]; then
   return 1
 fi
 
+printf "\n"
+warn "You are about to drop database '$dbname'."
+read -r -p "Confirm? (y/n): " confirm
+if [[ "$confirm" != "y" ]]; then
+  info "Database drop cancelled."
+  return 1
+fi
+
 rm -rf "../data/$dbname" && success "Database '$dbname' dropped."
