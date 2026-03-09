@@ -11,7 +11,7 @@ function validate_type() {
     "bool") [[ "$value" == "true" || "$value" == "false" ]] ;;
     "date") [[ "$value" =~ ^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/[0-9]{4}$ ]] ;;
     "email") [[ "$value" =~ ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]] ;;
-    *) printf "Unsupported data type: %s" "$type"; exit 1 ;;
+    *) printf "Unsupported data type: %s" "$type"; return 0 ;;
   esac
 }
 
