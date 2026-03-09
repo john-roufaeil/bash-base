@@ -22,4 +22,19 @@ while [[ -z "$pkToDelete" ]]; do
 	fi
 done
 
+# Show the row to be deleted
+header=$(awk -F'|' '{printf "%s|", $1}' "$CONNECTED_DB_PATH/.$TABLE" | sed 's/|$//')
+row=$(awk -v pk="$pkToDelete" -F'|' '$1 == pk' "$CONNECTED_DB_PATH/$TABLE")
+
+printf "\n"
+warn "Row to be deleted:"
+(printf "%s\n" "$header"; printf "%s\n" "$row") | column -t -s '|'
+printf "\n"
+
+read -r -p "Are you sure you want to delete this row? (y/n): " confirm < /dev/tty
+if [[ "$confirm" != "y" ]]; then
+  info "Deletion cancelled."
+  return 1
+fi
+
 bypass=true source ./entry-mgmt/delete.sh "$TABLE" "$pkToDelete"
