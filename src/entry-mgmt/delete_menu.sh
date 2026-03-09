@@ -11,10 +11,10 @@ fi
 
 pkToDelete=""
 while [[ -z "$pkToDelete" ]]; do
-	read -r -p "Enter primary key of the row to delete: " input
-	if [[ "$input" == "back!" ]]; then
-		info "Deletion cancelled."; return 1
-	elif validate_pk "$input" "$CONNECTED_DB_PATH/$TABLE"; then
+	read -r -p "Enter primary key of the row to delete: " input || {
+		printf "\n"; info "Deletion cancelled."; return 1;
+	}
+	if validate_pk "$input" "$CONNECTED_DB_PATH/$TABLE"; then
 		error "Primary key not found. Please try again."
 	else
 		pkToDelete="$input"

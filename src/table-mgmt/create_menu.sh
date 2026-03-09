@@ -6,10 +6,10 @@ fi
 
 colCount=""
 while [[ -z "$colCount" ]]; do
-  read -r -p "Number of columns: " input
-    if [[ "$input" == "back!" ]]; then 
-      info "Table creation cancelled"; return 1
-  elif [[ "$input" =~ ^[0-9]+$ ]] && [[ "$input" -gt 0 ]]; then
+  read -r -p "Number of columns: " input || {
+    printf "\n"; info "Table creation cancelled"; return 1;
+  }
+  if [[ "$input" =~ ^[0-9]+$ ]] && [[ "$input" -gt 0 ]]; then
     colCount="$input"
   else
     error "Invalid count. Must be a positive integer."
@@ -22,10 +22,10 @@ for (( i=1; i<="$colCount"; i++ )); do
 
   colName=""
   while [[ -z "$colName" ]]; do
-    read -p "  Column Name: " input
-    if [[ "$input" == "back!" ]]; then 
-      info "Table creation cancelled"; return 1
-    elif validate_identifier "$input"; then colName="$input";
+    read -r -p "  Column Name: " input || {
+      printf "\n"; info "Table creation cancelled"; return 1;
+    }
+    if validate_identifier "$input"; then colName="$input";
     else error "Invalid column name."; fi
   done
 
@@ -34,13 +34,14 @@ for (( i=1; i<="$colCount"; i++ )); do
   while [[ -z "$colType" ]]; do
     printf "  Select Type for '%s': \n" "$colName"
     select opt in "${options[@]}"; do
-      if [[ "$REPLY" == "back!" ]]; then 
-        info "Table creation cancelled"
-        return 1;
-      elif [[ -n "$opt" ]]; then colType="$opt";
+      if [[ -n "$opt" ]]; then colType="$opt";
       else error "Invalid choice."; fi
-      break # What to replace this with?
+      break
     done
+    # Ctrl+D exits select without setting opt
+    if [[ -z "$colType" && -z "$REPLY" ]]; then
+      printf "\n"; info "Table creation cancelled"; return 1
+    fi
   done
   metadata+="$colName|$colType"$'\n'
 done

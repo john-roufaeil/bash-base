@@ -6,13 +6,13 @@ if [[ -z "$CONNECTED_DB" ]]; then
   return 1
 fi
 
-info "Type 'back!' to cancel"
+info "Press Ctrl+D to cancel"
 tableName=""
 while [[ -z "$tableName" ]]; do
-  read -r -p "Enter table name: " input
-  if [[ "$input" == "back!" ]]; then
-    info "Operation cancelled."; return 1
-  elif ! validate_identifier "$input"; then
+  read -r -p "Enter table name: " input || {
+    printf "\n"; info "Operation cancelled."; return 1;
+  }
+  if ! validate_identifier "$input"; then
     error "Invalid table identifier."
   elif [[ $1 == "create" && (-f "$CONNECTED_DB_PATH/$input" || -f "$CONNECTED_DB_PATH/.$input") ]]; then
     error "Table '$input' already exists. Try again."
@@ -31,6 +31,6 @@ if [[ "$1" == "select" ]]; then
   printf "\n"
   return 0
 else
-  info "Type 'back!' to cancel"
+  info "Press Ctrl+D to cancel"
   printf "\n"
 fi
