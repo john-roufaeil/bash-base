@@ -3,6 +3,9 @@
 # 1. Choose table
 source ./table-mgmt/choose.sh
 
+info "Type 'back!' to cancel"
+printf "\n"
+
 # 2. Construct new entry: read metadata, prompt for input, validate types
 newEntry=""
 # Outer loop reads metadata file lines
@@ -18,12 +21,8 @@ while IFS="|" read -r colName colType; do
 
     if ! validate_type "$value" "$colType"; then
       error "Invalid value for type '$colType'. Please try again."
-      continue
-    fi
-
-    if ! validate_pk "$value" "$DB_PATH/$TABLE"; then
+    elif ! validate_pk "$value" "$DB_PATH/$TABLE"; then
       error "Primary key '$value' already exists. Please try again."
-      continue
     fi
   done
   newEntry+="$value|"

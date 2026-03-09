@@ -2,6 +2,9 @@
 
 source ./table-mgmt/choose.sh
 
+info "Type 'back!' to cancel"
+printf "\n"
+
 if [[ ! -s "$DB_PATH/$TABLE" ]]; then
   warn "Table is empty. Nothing to delete."
   return

@@ -21,5 +21,3 @@ fi
 
 clear
 success "Table '$TABLE' in database '$CURRENT_DB'"
-info "Type 'back!' to cancel"
-printf "\n"

@@ -9,17 +9,17 @@ if [[ ! -s "$DB_PATH/$TABLE" ]]; then
 fi
 
 # input PK
-pkToUpdate=""
-while [[ -z "$pkToUpdate" ]]; do
-  read -r -p "Enter primary key of the row to update: " pk
+primaryKey=""
+while [[ -z "$primaryKey" ]]; do
+  read -r -p "Enter primary key of the row to update: " input
 
-  if [[ "$pk" == "back!" ]]; then
+  if [[ "$input" == "back!" ]]; then
     warn "Update cancelled. Returning to database menu."
-    return
+    return 1
   fi
 
-  if ! validate_pk "$pk" "$DB_PATH/$TABLE"; then
-    pkToUpdate=$pk
+  if ! validate_pk "$input" "$DB_PATH/$TABLE"; then
+    primaryKey=$input
   else
     error "Primary key not found. Please try again."
   fi
@@ -39,23 +39,20 @@ for i in "${!colNames[@]}"; do
 done
 
 colChoice=""
-while ! [[ "$colChoice" =~ ^[0-9]+$ ]] || [[ "$colChoice" -lt 1 ]] || [[ "$colChoice" -gt "${#colNames[@]}" ]]; do
-  read -r -p "Choice [1-${#colNames[@]}]: " colChoice
+while [[ -z "$colChoice" ]]; do
+  read -r -p "Choice [1-${#colNames[@]}]: " input
   
-  if [[ "$colChoice" == "back!" ]]; then
+  if [[ "$input" == "back!" ]]; then
     warn "Update cancelled. Returning to database menu."
     return
   fi
 
-  if [[ "$colChoice" == 1 ]]; then
+  if [[ "$input" == 1 ]]; then
     warn "Primary key cannot be updated. Please select a different column."
-    colChoice=""
-    continue
-  fi
-
-  if ! [[ "$colChoice" =~ ^[0-9]+$ ]] || [[ "$colChoice" -lt 1 ]] || [[ "$colChoice" -gt "${#colNames[@]}" ]]; then
+  elif ! [[ "$input" =~ ^[0-9]+$ ]] || [[ "$input" -lt 1 ]] || [[ "$input" -gt "${#colNames[@]}" ]]; then
     error "Invalid column choice. Please enter a number between 1 and ${#colNames[@]}."
   fi
+  colChoice="$input"
 done
 
 # input new Value & validate
@@ -75,8 +72,8 @@ while [[ -z "$inputValue" ]]; do
 done
 
 # update row
-awk -v pk="$pkToUpdate" -v col="$colChoice" -v val="$inputValue" -F'|' \
+awk -v pk="$primaryKey" -v col="$colChoice" -v val="$inputValue" -F'|' \
   'BEGIN{OFS=FS} $1==pk {$col=val} {print}' "$DB_PATH/$TABLE" > "$DB_PATH/$TABLE.tmp"
 mv "$DB_PATH/$TABLE.tmp" "$DB_PATH/$TABLE"
-success "Row with primary key '$pkToUpdate' updated successfully!"
+success "Row with primary key '$primaryKey' updated successfully!"
 return
