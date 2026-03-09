@@ -1,23 +1,35 @@
 #!/bin/bash
-
-source ./table-mgmt/list.sh
-read -r -p "Enter table name: " tableName
-export TABLE="$tableName"
+# Usage: table-mgmt/choose.sh operation
 
 if [[ -z "$CURRENT_DB" ]]; then
   error "No database selected."
   exit
 fi
 
-if [[ -z "$TABLE" ]]; then
-  error "No table selected."
-  exit
-fi
+info "Type 'back!' to cancel"
+tableName=""
+while [[ -z "$tableName" ]]; do
+  read -r -p "Enter table name: " input
+  if [[ "$input" == "back!" ]]; then
+    warn "Operation cancelled."
+    return 1
+  elif ! validate_identifier "$input"; then
+    error "Invalid table identifier."
+  elif [[ ! -f "$DB_PATH/$input" || ! -f "$DB_PATH/.$input" ]]; then
+    error "Table '$input' does not exist. Try again."
+  else
+    tableName="$input"
+  fi
+done
 
-if [[ ! -f "$DB_PATH/$TABLE" || ! -f "$DB_PATH/.$TABLE" ]]; then
-  error "Table '$TABLE' not found in database '$CURRENT_DB'."
-  return 1
-fi
-
+export TABLE="$tableName"
 clear
 success "Table '$TABLE' in database '$CURRENT_DB'"
+
+if [[ "$1" == "select" ]]; then
+  printf "\n"
+  return 0
+else
+  info "Type 'back!' to cancel"
+  printf "\n"
+fi

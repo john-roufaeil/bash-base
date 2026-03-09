@@ -1,5 +1,8 @@
 #!/bin/bash
 source ./table-mgmt/choose.sh
+if [[ $? -ne 0 ]]; then
+  return 1
+fi
 
 if [[ ! -s "$DB_PATH/$TABLE" ]]; then
   warn "Table is empty. Nothing to update."

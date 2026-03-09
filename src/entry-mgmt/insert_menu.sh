@@ -1,5 +1,8 @@
 #!/bin/bash
 source ./table-mgmt/choose.sh
+if [[ $? -ne 0 ]]; then
+  return 1
+fi
 
 newRow=""
 colIndex=1
@@ -10,13 +13,12 @@ while read -r line; do
   while [[ -z "$validatedVal" ]]; do
     read -r -p "Enter $colName ($colType): " input
 		if [[ "$input" == "back!" ]]; then
-		  return;
-    fi
-    
-    if ! validate_type "$input" "$colType";
-		  then error "Invalid type.";
+		  warn "Insertion cancelled."
+		  return 1
+    elif ! validate_type "$input" "$colType"; then
+		  error "Invalid type.";
     elif [[ "$colIndex" -eq 1 ]] && ! validate_pk "$input" "$DB_PATH/$TABLE"; then
-		 error "PK exists.";
+		  error "PK exists.";
     else
       validatedVal="$input"
     fi
