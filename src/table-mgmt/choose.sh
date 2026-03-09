@@ -1,9 +1,9 @@
 #!/bin/bash
 # Usage: table-mgmt/choose.sh operation
 
-if [[ -z "$CURRENT_DB" ]]; then
+if [[ -z "$CONNECTED_DB" ]]; then
   error "No database selected."
-  exit
+  return 1
 fi
 
 info "Type 'back!' to cancel"
@@ -15,7 +15,7 @@ while [[ -z "$tableName" ]]; do
     return 1
   elif ! validate_identifier "$input"; then
     error "Invalid table identifier."
-  elif [[ ! -f "$DB_PATH/$input" || ! -f "$DB_PATH/.$input" ]]; then
+  elif [[ ! -f "$CONNECTED_DB_PATH/$input" || ! -f "$CONNECTED_DB_PATH/.$input" ]]; then
     error "Table '$input' does not exist. Try again."
   else
     tableName="$input"
@@ -24,7 +24,7 @@ done
 
 export TABLE="$tableName"
 clear
-success "Table '$TABLE' in database '$CURRENT_DB'"
+success "Table '$TABLE' in database '$CONNECTED_DB'"
 
 if [[ "$1" == "select" ]]; then
   printf "\n"

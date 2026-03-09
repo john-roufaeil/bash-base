@@ -1,8 +1,10 @@
 #!/bin/bash
 # shellcheck disable=SC1091
 
+PS_MAIN="$CONNECTED_DB> "
+
 show_db_menu() {
-  PS3="$CURRENT_DB> "
+  PS3="$PS_MAIN"
   options=("Create Table" "List Tables" "Drop Table" "Insert into Table" "Select From Table" "Delete From Table" "Update Table" "Back to Main Menu")
 
   select opt in "${options[@]}"; do
@@ -17,9 +19,9 @@ show_db_menu() {
       "Back to Main Menu")  break ;;
       *)                    error "Invalid option $REPLY" ;;
     esac
+
     read -r -n 1 -p "Press enter to return to menu"
     clear
-
-    PS3="$CURRENT_DB> "
+    PS3="$PS_MAIN> "
   done
 }

@@ -2,7 +2,7 @@
 targetTable=$1
 
 if [[ "$bypass" != "true" ]]; then
-  if [[ -z "$CURRENT_DB" ]]; then
+  if [[ -z "$CONNECTED_DB" ]]; then
     error "Database context missing."
     return 1
   elif ! validate_identifier "$targetTable"; then

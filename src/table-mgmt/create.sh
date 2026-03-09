@@ -3,7 +3,7 @@ targetTable=$1
 tableMetadata=$2
 
 if [[ "$bypass" != "true" ]]; then
-  if [[ -z "$CURRENT_DB" ]]; then
+  if [[ -z "$CONNECTED_DB" ]]; then
     error "Database context missing."
     return 1
   elif ! validate_identifier "$targetTable" || [[ -f "$DB_PATH/$targetTable" ]]; then

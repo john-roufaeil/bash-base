@@ -46,7 +46,6 @@ fi
 # 5. Normal Execution Flow
 mkdir -p ../data
 clear
-info "Welcome to Bash-Base DBMS"
 
 # Load and launch the menu
 source menus/main_menu.sh

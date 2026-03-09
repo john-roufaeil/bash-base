@@ -1,7 +1,7 @@
 #!/bin/bash
 info "Type 'back!' to cancel"
 
-if [[ -z "$CURRENT_DB" ]]; then
+if [[ -z "$CONNECTED_DB" ]]; then
   error "No database selected."
   return 1
 fi
