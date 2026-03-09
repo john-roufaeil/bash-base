@@ -50,7 +50,7 @@ done
 exec 3<&-
 exec 4<&-
 
-printf "--------------------------------"
+printf "%s\n" "-----------------------------"
 if [ $failed -eq 0 ]; then
   success "All $passed tests passed!"
 else
