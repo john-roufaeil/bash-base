@@ -11,9 +11,9 @@ source lib/validate.sh
 # 3. Handle Flags
 case "$1" in
   -t|--test)
-    if [[ -f "tests/run_tests.sh" ]]; then
+    if [[ -f "../tests/run_tests.sh" ]]; then
       info "Running Test Suite..."
-      bash tests/run_tests.sh
+      bash ../tests/run_tests.sh
       exit $?
     else
       error "Test runner not found at tests/run_tests.sh"
