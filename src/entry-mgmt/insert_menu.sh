@@ -17,7 +17,7 @@ while read -r line; do
 		  return 1
     elif ! validate_type "$input" "$colType"; then
 		  error "Invalid type.";
-    elif [[ "$colIndex" -eq 1 ]] && ! validate_pk "$input" "$DB_PATH/$TABLE"; then
+    elif [[ "$colIndex" -eq 1 ]] && ! validate_pk "$input" "$CONNECTED_DB_PATH/$TABLE"; then
 		  error "PK exists.";
     else
       validatedVal="$input"
@@ -26,7 +26,7 @@ while read -r line; do
   done < /dev/tty
   newRow+="$validatedVal|"
   ((colIndex++))
-done < "$DB_PATH/.$TABLE"
+done < "$CONNECTED_DB_PATH/.$TABLE"
 
 newRow=$(echo "$newRow" | sed 's/|$//')
 bypass=true source ./entry-mgmt/insert.sh "$TABLE" "$newRow"

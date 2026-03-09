@@ -22,6 +22,6 @@ show_db_menu() {
 
     read -r -n 1 -p "Press enter to return to menu"
     clear
-    PS3="$PS_MAIN> "
+    PS3="$PS_MAIN"
   done
 }

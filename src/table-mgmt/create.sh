@@ -6,7 +6,7 @@ if [[ "$bypass" != "true" ]]; then
   if [[ -z "$CONNECTED_DB" ]]; then
     error "Database context missing."
     return 1
-  elif ! validate_identifier "$targetTable" || [[ -f "$DB_PATH/$targetTable" ]]; then
+  elif ! validate_identifier "$targetTable" || [[ -f "$CONNECTED_DB_PATH/$targetTable" ]]; then
     error "Invalid or existing table name."
     return 1
   elif [[ -z "$tableMetadata" ]]; then
@@ -22,7 +22,7 @@ if [[ "$bypass" != "true" ]]; then
   done <<< "$tableMetadata"
 fi
 
-printf "%s" "$tableMetadata" > "$DB_PATH/.$targetTable"
-touch "$DB_PATH/$targetTable"
+printf "%s" "$tableMetadata" > "$CONNECTED_DB_PATH/.$targetTable"
+touch "$CONNECTED_DB_PATH/$targetTable"
 
 success "Table '$targetTable' created successfully."

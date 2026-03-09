@@ -4,13 +4,13 @@ rowData=$2
 
 if [[ "$bypass" != "true" ]]; then
   IFS='|' read -r -a values <<< "$rowData"
-  schemaFile="$DB_PATH/.$targetTable"
+  schemaFile="$CONNECTED_DB_PATH/.$targetTable"
   expectedCols=$(wc -l < "$schemaFile")
   
   if [[ "${#values[@]}" -ne "$expectedCols" ]]; then
     error "Column count mismatch."
     return 1
-  elif ! validate_pk "${values[0]}" "$DB_PATH/$targetTable"; then
+  elif ! validate_pk "${values[0]}" "$CONNECTED_DB_PATH/$targetTable"; then
     error "PK already exists."
     return 1
   else
@@ -26,5 +26,5 @@ if [[ "$bypass" != "true" ]]; then
   fi
 fi
 
-echo "$rowData" >> "$DB_PATH/$targetTable"
+echo "$rowData" >> "$CONNECTED_DB_PATH/$targetTable"
 success "Inserted successfully!"

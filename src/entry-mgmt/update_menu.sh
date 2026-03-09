@@ -4,7 +4,7 @@ if [[ $? -ne 0 ]]; then
   return 1
 fi
 
-if [[ ! -s "$DB_PATH/$TABLE" ]]; then
+if [[ ! -s "$CONNECTED_DB_PATH/$TABLE" ]]; then
   warn "Table is empty. Nothing to update."
 	return 1
 fi
@@ -15,7 +15,7 @@ while [[ -z "$primaryKey" ]]; do
 	if [[ "$input" == "back!" ]]; then
 		info "Update cancelled."
 		return 1
-	elif ! validate_pk "$input" "$DB_PATH/$TABLE"; then
+	elif ! validate_pk "$input" "$CONNECTED_DB_PATH/$TABLE"; then
 		primaryKey="$input"
 	else
 		error "Primary key not found."
@@ -27,7 +27,7 @@ colTypes=()
 while IFS="|" read -r colName colType; do
 	colNames+=("$colName")
 	colTypes+=("$colType")
-done < "$DB_PATH/.$TABLE"
+done < "$CONNECTED_DB_PATH/.$TABLE"
 
 colChoice=""
 while [[ -z "$colChoice" ]]; do
