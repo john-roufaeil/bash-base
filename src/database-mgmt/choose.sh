@@ -6,7 +6,7 @@ dbName=""
 while [[ -z "$dbName" ]]; do
   read -r -p "Enter Database Name: " input
   if [[ "$input" == "back!" ]]; then
-    warn "Operation cancelled."
+    info "Operation cancelled."
     return 1
   elif ! validate_identifier "$input"; then
     error "Invalid database identifier."

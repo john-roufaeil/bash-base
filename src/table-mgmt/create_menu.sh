@@ -23,7 +23,7 @@ colCount=""
 while [[ -z "$colCount" ]]; do
   read -r -p "Number of columns: " input
     if [[ "$input" == "back!" ]]; then 
-      warn "Table creation cancelled"
+      info "Table creation cancelled"
       return 1;
   elif [[ "$input" =~ ^[0-9]+$ ]] && [[ "$input" -gt 0 ]]; then
     colCount="$input"
@@ -39,7 +39,7 @@ for (( i=1; i<="$colCount"; i++ )); do
   while [[ -z "$colName" ]]; do
     read -p "  Column Name: " input
     if [[ "$input" == "back!" ]]; then 
-      warn "Table creation cancelled"
+      info "Table creation cancelled"
       return 1;
     elif validate_identifier "$input"; then colName="$input";
     else error "  Invalid column name."; fi
@@ -50,9 +50,12 @@ for (( i=1; i<="$colCount"; i++ )); do
   while [[ -z "$colType" ]]; do
     echo "  Select Type for '$colName':"
     select opt in "${options[@]}"; do
-      if [[ -n "$opt" ]]; then colType="$opt";
-      else error "  Invalid choice."; fi
-      break
+      if [[ "$REPLY" == "back!" ]]; then 
+        info "Table creation cancelled"
+        return 1;
+      elif [[ -n "$opt" ]]; then colType="$opt";
+      else error "Invalid choice."; fi
+      break # What to replace this with?
     done
   done
   metadata+="$colName|$colType"$'\n'

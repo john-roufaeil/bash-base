@@ -11,7 +11,7 @@ tableName=""
 while [[ -z "$tableName" ]]; do
   read -r -p "Enter table name: " input
   if [[ "$input" == "back!" ]]; then
-    warn "Operation cancelled."
+    info "Operation cancelled."
     return 1
   elif ! validate_identifier "$input"; then
     error "Invalid table identifier."

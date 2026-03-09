@@ -13,7 +13,7 @@ primaryKey=""
 while [[ -z "$primaryKey" ]]; do
 	read -r -p "Enter primary key of the row to update: " input
 	if [[ "$input" == "back!" ]]; then
-		warn "Update cancelled."
+		info "Update cancelled."
 		return 1
 	elif ! validate_pk "$input" "$DB_PATH/$TABLE"; then
 		primaryKey="$input"
