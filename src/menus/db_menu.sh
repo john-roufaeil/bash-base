@@ -7,9 +7,9 @@ show_db_menu() {
 
   select opt in "${options[@]}"; do
     case $opt in
-      "Create Table")       source ./table-mgmt/create.sh ;;
+      "Create Table")       source ./table-mgmt/create_menu.sh ;;
       "List Tables")        source ./table-mgmt/list.sh ;;
-      "Drop Table")         source ./table-mgmt/drop.sh ;;
+      "Drop Table")         source ./table-mgmt/drop_menu.sh ;;
       "Insert into Table")  source ./entry-mgmt/insert_menu.sh ;;
       "Select From Table")  source ./entry-mgmt/select.sh ;;
       "Delete From Table")  source ./entry-mgmt/delete_menu.sh ;;

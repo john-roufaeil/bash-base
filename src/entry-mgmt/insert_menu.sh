@@ -9,13 +9,19 @@ while read -r line; do
   validatedVal=""
   while [[ -z "$validatedVal" ]]; do
     read -r -p "Enter $colName ($colType): " input
-    if [[ "$input" == "back!" ]]; then return;
-    elif ! validate_type "$input" "$colType"; then error "Invalid type.";
-    elif [[ "$colIndex" -eq 1 ]] && ! validate_pk "$input" "$DB_PATH/$TABLE"; then error "PK exists.";
+		if [[ "$input" == "back!" ]]; then
+		  return;
+    fi
+    
+    if ! validate_type "$input" "$colType";
+		  then error "Invalid type.";
+    elif [[ "$colIndex" -eq 1 ]] && ! validate_pk "$input" "$DB_PATH/$TABLE"; then
+		 error "PK exists.";
     else
       validatedVal="$input"
     fi
-  done
+
+  done < /dev/tty
   newRow+="$validatedVal|"
   ((colIndex++))
 done < "$DB_PATH/.$TABLE"
