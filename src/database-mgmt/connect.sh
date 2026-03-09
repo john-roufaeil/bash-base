@@ -17,13 +17,13 @@ if ! validate_identifier "$dbname"; then
   return 1
 fi
 
-if [[ ! -d "data/$dbname" ]]; then
+if [[ ! -d "../data/$dbname" ]]; then
   error "Database '$dbname' not found."
   return 1
 fi
 
 export CURRENT_DB="$dbname"
-export DB_PATH="data/$CURRENT_DB"
+export DB_PATH="../data/$CURRENT_DB"
 clear
 success "Connected to $dbname"
 source menus/db_menu.sh

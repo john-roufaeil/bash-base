@@ -16,9 +16,9 @@ if ! validate_identifier "$dbname"; then
   exit 1
 fi
 
-if [[ ! -d "data/$dbname" ]]; then
+if [[ ! -d "../data/$dbname" ]]; then
   error "Database '$dbname' does not exist."
   exit 1
 fi
 
-rm -rf "data/$dbname" && success "Database '$dbname' deleted."
+rm -rf "../data/$dbname" && success "Database '$dbname' deleted."
