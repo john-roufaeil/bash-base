@@ -19,7 +19,7 @@ while read -r line; do
     elif [[ "$colIndex" -eq 1 ]] && ! validate_pk "$input" "$CONNECTED_DB_PATH/$TABLE"; then
 		  error "PK exists.";
     else
-      validatedVal="$input"
+      validatedVal=$(escape_string "$input")
     fi
 
   done < /dev/tty

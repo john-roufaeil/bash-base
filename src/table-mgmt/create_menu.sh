@@ -25,8 +25,12 @@ for (( i=1; i<="$colCount"; i++ )); do
     read -r -p "  Column Name: " input || {
       printf "\n"; info "Table creation cancelled"; return 1;
     }
-    if validate_identifier "$input"; then colName="$input";
-    else error "Invalid column name."; fi
+    input=$(space_to_underscore "$input")
+    if validate_identifier "$input"; then
+      colName="$input"
+    else
+      error "Invalid column name."
+    fi
   done
 
   colType=""

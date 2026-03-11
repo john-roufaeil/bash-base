@@ -23,6 +23,6 @@ if [[ "$bypass" != "true" ]]; then
   fi
 fi
 
-awk -v pk="$pk" -v col="$col" -v val="$val" -F'|' 'BEGIN{OFS=FS} $1==pk {$col=val} {print}' "$CONNECTED_DB_PATH/$targetTable" > "$CONNECTED_DB_PATH/$targetTable.tmp"
+awk -v pk="$pk" -v col="$col" -v val="$(escape_string "$val")" -F'|' 'BEGIN{OFS=FS} $1==pk {$col=val} {print}' "$CONNECTED_DB_PATH/$targetTable" > "$CONNECTED_DB_PATH/$targetTable.tmp"
 mv "$CONNECTED_DB_PATH/$targetTable.tmp" "$CONNECTED_DB_PATH/$targetTable"
 success "Updated successfully!"

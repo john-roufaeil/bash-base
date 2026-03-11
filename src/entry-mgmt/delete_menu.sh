@@ -27,7 +27,7 @@ row=$(awk -v pk="$pkToDelete" -F'|' '$1 == pk' "$CONNECTED_DB_PATH/$TABLE")
 
 printf "\n"
 warn "You are about to delete this row."
-(printf "%s\n" "$header"; printf "%s\n" "$row") | column -t -s '|'
+(printf "%s\n" "$header"; printf "%s\n" "$(unescape_string "$row")") | column -t -s '|'
 printf "\n"
 
 read -r -p "Confirm? (y/n): " confirm

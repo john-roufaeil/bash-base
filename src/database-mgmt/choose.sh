@@ -7,6 +7,8 @@ while [[ -z "$dbName" ]]; do
   read -r -p "Enter Database Name: " input || { 
     printf "\n"; info "Operation cancelled."; return 1; 
   }
+  input=$(space_to_underscore "$input")
+
   if ! validate_identifier "$input"; then
     error "Invalid database identifier."
   elif [[ $1 == "create" && -d "../data/$input" ]]; then
@@ -15,7 +17,7 @@ while [[ -z "$dbName" ]]; do
     error "Database '$input' does not exist. Try again."
   else
     # substitute space for underscore
-    dbName="${input// /_}"
+    dbName="$input"
   fi
 done
 

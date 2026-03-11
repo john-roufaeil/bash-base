@@ -12,6 +12,9 @@ while [[ -z "$tableName" ]]; do
   read -r -p "Enter table name: " input || {
     printf "\n"; info "Operation cancelled."; return 1;
   }
+
+  input=$(space_to_underscore "$input")
+
   if ! validate_identifier "$input"; then
     error "Invalid table identifier."
   elif [[ $1 == "create" && (-f "$CONNECTED_DB_PATH/$input" || -f "$CONNECTED_DB_PATH/.$input") ]]; then
