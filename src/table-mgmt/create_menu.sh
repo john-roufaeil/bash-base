@@ -33,19 +33,19 @@ for (( i=1; i<="$colCount"; i++ )); do
     fi
   done
 
+  # we don't use select because it is infinite by design & need to break 
   colType=""
-  options=("int" "float" "string" "bool" "date" "email")
   while [[ -z "$colType" ]]; do
     printf "  Select Type for '%s': \n" "$colName"
-    select opt in "${options[@]}"; do
-      if [[ -n "$opt" ]]; then colType="$opt";
-      else error "Invalid choice."; fi
-      break
-    done
-    # Ctrl+D exits select without setting opt
-    if [[ -z "$colType" && -z "$REPLY" ]]; then
+    printf "  1) int  2) float  3) string  4) bool  5) date  6) email\n"
+    read -r -p "  Type [1-6]: " input || {
       printf "\n"; info "Table creation cancelled"; return 1
-    fi
+    }
+    case "$input" in
+      1) colType="int" ;; 2) colType="float" ;; 3) colType="string" ;;
+      4) colType="bool" ;; 5) colType="date" ;; 6) colType="email" ;;
+      *) error "Invalid choice." ;;
+    esac
   done
   metadata+="$colName|$colType"$'\n'
 done

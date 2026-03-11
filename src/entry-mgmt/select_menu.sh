@@ -17,17 +17,19 @@ while [[ -z "$colsChoice" ]]; do
   # Validate input format
   if ! [[ "$input" =~ ^[0-9]+(,[0-9]+)*$ ]]; then
     error "Invalid format. Please enter numbers separated by commas."
-    continue
+  else
+    # Validate each choice is in range
+    IFS=',' read -r -a choices <<< "$input"
+    validCount=0
+    for choice in "${choices[@]}"; do
+      if [[ "$choice" -lt 1 ]] || [[ "$choice" -gt "${#colNames[@]}" ]]; then
+        error "Invalid choice: $choice. Please choose between 1 and ${#colNames[@]}."
+      else
+        ((validCount++))
+      fi
+    done
+    [[ "$validCount" -eq "${#choices[@]}" ]] && colsChoice="$input"
   fi
-  # Validate each choice is in range
-  IFS=',' read -r -a choices <<< "$input"
-  for choice in "${choices[@]}"; do
-    if [[ "$choice" -lt 1 ]] || [[ "$choice" -gt "${#colNames[@]}" ]]; then
-      error "Invalid choice: $choice. Please choose between 1 and ${#colNames[@]}."
-      continue 2
-    fi
-  done
-  colsChoice="$input"
 done
 
 bypass=true source ./entry-mgmt/select.sh "$inputPK" "$colsChoice"
