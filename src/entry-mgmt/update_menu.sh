@@ -1,26 +1,7 @@
 #!/bin/bash
-source ./table-mgmt/choose.sh
-if [[ $? -ne 0 ]]; then
-  return 1
-fi
+source ./entry-mgmt/find_PK.sh
 
-if [[ ! -s "$CONNECTED_DB_PATH/$TABLE" ]]; then
-  warn "Table is empty. Nothing to update."
-	return 1
-fi
-
-primaryKey=""
-while [[ -z "$primaryKey" ]]; do
-	read -r -p "Enter primary key of the row to update: " input || {
-		printf "\n"; info "Update cancelled."; return 1;
-	}
-	if ! validate_pk "$input" "$CONNECTED_DB_PATH/$TABLE"; then
-		primaryKey="$input"
-	else
-		error "Primary key not found."
-	fi
-done
-
+printf "\nChoose the column to update:\n"
 colNames=()
 colTypes=()
 while IFS="|" read -r colName colType; do
@@ -48,11 +29,11 @@ while [[ -z "$newValue" ]]; do
 	}
 	if ! validate_type "$input" "${colTypes[$((colChoice-1))]}"; then
 		error "Invalid type."
-	elif [[ "$colChoice" -eq 1 ]] && ! validate_pk "$input" "$CONNECTED_DB_PATH/$TABLE" && [[ "$input" != "$primaryKey" ]]; then
+	elif [[ "$colChoice" -eq 1 ]] && ! validate_pk "$input" "$CONNECTED_DB_PATH/$TABLE" && [[ "$input" != "$inputPK" ]]; then
 		error "Primary key '$input' already exists."
 	else
 		newValue="$input"
 	fi
 done
 
-bypass=true source ./entry-mgmt/update.sh "$TABLE" "$primaryKey" "$colChoice" "$newValue"
+bypass=true source ./entry-mgmt/update.sh "$TABLE" "$inputPK" "$colChoice" "$newValue"
