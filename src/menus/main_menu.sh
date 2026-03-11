@@ -1,12 +1,12 @@
 #!/bin/bash
 
-PS_MAIN="DBMS-Main> "
+PS_DBMS="bash-base> "
 
 show_main_menu() {
   info "Welcome to Bash-Base DBMS"
-  PS3="$PS_MAIN"
   options=("Create Database" "Drop Database" "List Databases" "Connect to Database" "Exit")
   printf "\n"
+  PS3="$PS_DBMS"
   
   select opt in "${options[@]}"; do
     case $opt in
@@ -20,6 +20,6 @@ show_main_menu() {
 
     read -r -n 1 -p "Press enter to return to menu"
     clear
-    PS3="$PS_MAIN"
+    PS3="$PS_DBMS"
   done
 }
