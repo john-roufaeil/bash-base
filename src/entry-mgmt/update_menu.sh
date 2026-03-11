@@ -9,6 +9,7 @@ while IFS="|" read -r colName colType; do
 	colTypes+=("$colType")
 done < "$CONNECTED_DB_PATH/.$TABLE"
 
+# Prompt user to choose column to update
 colChoice=""
 while [[ -z "$colChoice" ]]; do
 	for i in "${!colNames[@]}"; do printf "%d: %s (%s)\n" "$((i+1))" "${colNames[$i]}" "${colTypes[$i]}"; done
@@ -22,6 +23,7 @@ while [[ -z "$colChoice" ]]; do
 	fi
 done
 
+# Prompt user for new value
 newValue=""
 while [[ -z "$newValue" ]]; do
 	read -r -p "Enter new value: " input || {
@@ -36,4 +38,5 @@ while [[ -z "$newValue" ]]; do
 	fi
 done
 
+# Perform the update
 bypass=true source ./entry-mgmt/update.sh "$TABLE" "$inputPK" "$colChoice" "$newValue"

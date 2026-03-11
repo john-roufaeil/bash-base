@@ -1,5 +1,5 @@
 #!/bin/bash
-source table-mgmt/choose.sh
+source ./table-mgmt/choose.sh
 if [[ $? -ne 0 ]]; then
   return 1
 fi
