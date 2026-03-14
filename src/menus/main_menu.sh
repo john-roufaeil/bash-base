@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PS_DBMS="bash-base> "
+PS_DBMS="${PROMPT}bash-base >${RESET} "
 
 show_main_menu() {
   info "Welcome to Bash-Base DBMS"

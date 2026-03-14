@@ -1,7 +1,7 @@
 #!/bin/bash
 # shellcheck disable=SC1091
 
-PS_DB="$CONNECTED_DB> "
+PS_DB="${PROMPT}${CONNECTED_DB} >${RESET} "
 
 show_db_menu() {
   PS3="$PS_DB"
