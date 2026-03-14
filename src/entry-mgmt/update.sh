@@ -23,10 +23,7 @@ if [[ "$bypass" != "true" ]]; then
   fi
 fi
 
-# first escape turns everything into /x where x is the number
 val=$(escape_string "$val")
-# second escape doubles the backslashes so that they survive the awk processing
-val=$(printf '%q' "$val")
 awk -v pk="$pk" -v col="$col" -v val="$val" -F'|' 'BEGIN{OFS=FS} $1==pk {$col=val} {print}' "$CONNECTED_DB_PATH/$targetTable" > "$CONNECTED_DB_PATH/$targetTable.tmp"
 mv "$CONNECTED_DB_PATH/$targetTable.tmp" "$CONNECTED_DB_PATH/$targetTable"
 success "Updated successfully!"

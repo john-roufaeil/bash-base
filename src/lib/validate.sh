@@ -47,13 +47,13 @@ escape_string() {
   # If an argument is provided, echo it. 
   # Otherwise, read from stdin (the pipe).
   { [ -n "$1" ] && printf "%s" "$1" || cat; } | 
-    sed 's/\\/\\0/g; s/|/\\1/g; s/"/\\2/g'
+    sed 's/+/+0/g; s/\\/+1/g; s/|/+2/g; s/"/+3/g'
 }
 
 unescape_string() {
   # If an argument is provided, echo it. 
   # If not, it naturally reads from the pipe (stdin).
-  { [ -n "$1" ] && echo "$1" || cat; } | sed 's/\\2/"/g; s/\\1/|/g; s/\\0/\\/g'
+  { [ -n "$1" ] && echo "$1" || cat; } | sed 's/+3/"/g; s/+2/|/g; s/+1/\\/g; s/+0/+/g'
 }
 
 strip_quotes() {
