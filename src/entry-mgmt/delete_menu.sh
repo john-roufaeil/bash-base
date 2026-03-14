@@ -7,7 +7,10 @@ row=$(awk -v pk="$inputPK" -F'|' '$1 == pk' "$CONNECTED_DB_PATH/$TABLE")
 
 printf "\n"
 warn "You are about to delete this row."
-(printf "%s\n" "$header"; printf "%s\n" "$(unescape_string "$row")") | column -t -s '|'
+(printf "%s\n" "$header"; printf "%s\n" "$row") |
+  sed 's/|/\t/g' |
+  unescape_string |
+  column -t -s $'\t'
 printf "\n"
 
 read -r -p "Confirm? (y/n): " confirm
