@@ -1,62 +1,28 @@
 #!/bin/bash
+targetTable=$1
+tableMetadata=$2
 
-if [[ -z "$CURRENT_DB" ]]; then
-  error "No database selected."
-  return 1
-fi
-
-info "Creating a new table in '$CURRENT_DB'"
-read -r -p "Table Name: " tableName
-
-# 1. Validate Table Name (Prevents path injection like ../../etc/passwd)
-if ! validate_identifier "$tableName"; then
-  error "Invalid table name. Use letters, numbers, and underscores only (must start with a letter)."
-  return 1
-fi
-
-if [[ -f "$DB_PATH/$tableName" ]]; then
-  error "Table '$tableName' already exists."
-  return 1
-fi
-
-read -r -p "Number of columns: " colCount
-if ! [[ "$colCount" =~ ^[0-9]+$ ]] || [[ "$colCount" -le 0 ]]; then
-  error "Invalid number of columns. Must be a positive integer."
-  return 1
-fi
-
-# 2. Collect Metadata
-metadata=""
-for (( i=1; i<="$colCount"; i++ )); do
-  success "Configuring Column #$i"
-  
-  read -p "  Column Name: " colName
-  if ! validate_identifier "$colName"; then
-    error "  Invalid column name. Skipping table creation."
+if [[ "$bypass" != "true" ]]; then
+  if [[ -z "$CONNECTED_DB" ]]; then
+    error "Database context missing."
+    return 1
+  elif ! validate_identifier "$targetTable" || [[ -f "$CONNECTED_DB_PATH/$targetTable" ]]; then
+    error "Invalid or existing table name."
+    return 1
+  elif [[ -z "$tableMetadata" ]]; then
+    error "Metadata cannot be empty."
     return 1
   fi
-
-  printf "  Select Type for '%s':\n" "$colName"
-  printf "  1) int   2) float   3) string   4) bool   5) date   6) email"
-  read -r -p "  Choice [1-6]: " typeChoice
   
-  case $typeChoice in
-    1) colType="int" ;;
-    2) colType="float" ;;
-    3) colType="string" ;;
-    4) colType="bool" ;;
-    5) colType="date" ;;
-    6) colType="email" ;;
-    *) error "  Invalid choice."; return 1 ;;
-  esac
+  while IFS="|" read -r cName cType; do
+    if ! validate_identifier "$cName"; then
+      error "Invalid column name in metadata."
+      return 1
+    fi
+  done <<< "$tableMetadata"
+fi
 
-  metadata+="$colName|$colType"$'\n'
-done
+printf "%s" "$tableMetadata" > "$CONNECTED_DB_PATH/.$targetTable"
+touch "$CONNECTED_DB_PATH/$targetTable"
 
-# 3. Atomic File Creation
-# Create hidden metadata first, then the empty data file
-printf "%s" "$metadata" > "$DB_PATH/.$tableName"
-touch "$DB_PATH/$tableName"
-
-success "Table '$tableName' created successfully."
-return 0
+success "Table '$targetTable' created successfully."

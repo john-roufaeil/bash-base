@@ -11,9 +11,9 @@ source lib/validate.sh
 # 3. Handle Flags
 case "$1" in
   -t|--test)
-    if [[ -f "tests/run_tests.sh" ]]; then
+    if [[ -f "../tests/run_tests.sh" ]]; then
       info "Running Test Suite..."
-      bash tests/run_tests.sh
+      bash ../tests/run_tests.sh
       exit $?
     else
       error "Test runner not found at tests/run_tests.sh"
@@ -46,7 +46,7 @@ fi
 # 5. Normal Execution Flow
 mkdir -p ../data
 clear
-info "Welcome to Bash-Base DBMS"
+trap 'printf "\n"; info "Goodbye!"; exit 1' INT
 
 # Load and launch the menu
 source menus/main_menu.sh

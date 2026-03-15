@@ -5,6 +5,7 @@ GRN=$'\033[0;32m'
 RED=$'\033[0;31m'
 YLW=$'\033[0;33m'
 WHT=$'\033[0;1m'
+PROMPT=$'\033[0;36;3;1m'
 
 # Internal helper: printclr "message" "color_code"
 printclr() { printf "%s* %s %s\n" "$2" "$1" "$RESET"; }
@@ -14,6 +15,7 @@ success() { printclr "$1" "$GRN"; }
 warn()    { printclr "$1" "$YLW"; }
 info()    { printclr "$1" "$WHT"; }
 error()   { printclr "$1" "$RED" >&2; }
+prompt()  { printclr "$1" "$PROMPT"; }
 
 export -f printclr
 export -f success

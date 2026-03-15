@@ -5,4 +5,5 @@ Boolean validation					| success | Failed to validate 'true' as bool
 Valid Table Name						| success | Valid identifier was rejected
 Leading Digit Name					| fail    | Identifier starting with number should fail
 Complex Escaping						| success | Escaping logic corrupted the string
+Complex UnEscaping					| success | Failed to unescape string
 Quote Stripping							| success | Failed to remove double quotes

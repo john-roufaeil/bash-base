@@ -1,31 +1,18 @@
 #!/bin/bash
+targetTable=$1
+pk=$2
 
-source ./table-mgmt/choose.sh
-
-if [[ ! -s "$DB_PATH/$TABLE" ]]; then
-  warn "Table is empty. Nothing to delete."
-  return
+if [[ "$bypass" != "true" ]]; then
+  if [[ ! -s "$CONNECTED_DB_PATH/$targetTable" ]]; then
+    error "Table is empty or missing."
+    return 1
+  elif validate_pk "$pk" "$CONNECTED_DB_PATH/$targetTable"; then
+    error "Primary key '$pk' does not exist."
+    return 1
+  fi
 fi
 
-pkToDelete=""
-while [[ -z "$pkToDelete" ]]; do
-  read -r -p "Enter primary key of the row to delete: " pk
+awk -v pk="$pk" -F'|' '$1 != pk {print}' "$CONNECTED_DB_PATH/$targetTable" > "$CONNECTED_DB_PATH/$targetTable.tmp"
+mv "$CONNECTED_DB_PATH/$targetTable.tmp" "$CONNECTED_DB_PATH/$targetTable"
 
-  if [[ "$pk" == "back!" ]]; then
-    warn "Deletion cancelled. Returning to database menu."
-    return
-  fi
-
-  if ! validate_pk "$pk" "$DB_PATH/$TABLE"; then
-    pkToDelete=$pk
-  else
-    error "Primary key not found. Please try again."
-  fi
-done
-
-existingData=$(cat "$DB_PATH/$TABLE")
-awk -v pk="$pkToDelete" -F'|' '$1 != pk {print}' "$DB_PATH/$TABLE" > "$existingData.tmp"
-mv "$existingData.tmp" "$DB_PATH/$TABLE"
-
-success "Row with primary key '$pkToDelete' deleted successfully!"
-return
+success "Row with primary key '$pk' deleted successfully!"

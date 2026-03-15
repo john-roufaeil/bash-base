@@ -1,30 +1,20 @@
 #!/bin/bash
 
-# Note we are using returns here because this is intended to be used with source
+source database-mgmt/choose.sh "connect"
+if [[ $? -ne 0 ]]; then
+  return 1
+fi
 
-dbname="$1"
+dbname="${DB_INPUT:-$1}"
 
 if [[ -z "$dbname" ]]; then
   error "Usage: connect <database_name>"
   return 1
 fi
 
-# substitute space for underscore
-dbname="${dbname// /_}"
-
-if ! validate_identifier "$dbname"; then
-  error "Database name must be a valid identifier"
-  return 1
-fi
-
-if [[ ! -d "../data/$dbname" ]]; then
-  error "Database '$dbname' not found."
-  return 1
-fi
-
-export CURRENT_DB="$dbname"
-export DB_PATH="../data/$CURRENT_DB"
+export CONNECTED_DB="$DB_INPUT"
+export CONNECTED_DB_PATH="../data/$CONNECTED_DB"
 clear
-success "Connected to $dbname"
+success "Connected to $CONNECTED_DB"
 source menus/db_menu.sh
 show_db_menu

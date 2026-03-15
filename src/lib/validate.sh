@@ -11,10 +11,11 @@ function validate_type() {
     "bool") [[ "$value" == "true" || "$value" == "false" ]] ;;
     "date") [[ "$value" =~ ^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/[0-9]{4}$ ]] ;;
     "email") [[ "$value" =~ ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]] ;;
-    *) printf "Unsupported data type: %s" "$type"; exit 1 ;;
+    *) printf "Unsupported data type: %s" "$type"; return 0 ;;
   esac
 }
 
+# allowed to use the PK in the table
 validate_pk() {
   local value="$1"
   local tablePath="$2"
@@ -43,26 +44,16 @@ validate_identifier() {
 }
 
 escape_string() {
-  local input="$1"
-  local escaped="$input"
-
-  # 1. Escape the escape character first
-  escaped="${escaped//\\/\\\\}"
-  # 2. Escape the delimiter ('|' is our DB delimiter)
-  escaped="${escaped//|/\\|}"
-  # 3. Escape double quotes and dollar signs to prevent shell expansion
-  escaped="${escaped//\"/\\\"}"
-  escaped="${escaped//\$/\\\$}"
-  escaped="${escaped//\`/\\\`}"
-
-  printf "%s" "$escaped"
+  # If an argument is provided, echo it. 
+  # Otherwise, read from stdin (the pipe).
+  { [ -n "$1" ] && printf "%s" "$1" || cat; } | 
+    sed 's/+/+0/g; s/\\/+1/g; s/|/+2/g; s/"/+3/g'
 }
 
 unescape_string() {
-  local input="$1"
-  # Use printf %b to interpret backslash escapes once
-  # clearing the additional escapes added by escape string
-  printf "%b" "$input"
+  # If an argument is provided, echo it. 
+  # If not, it naturally reads from the pipe (stdin).
+  { [ -n "$1" ] && echo "$1" || cat; } | sed 's/+3/"/g; s/+2/|/g; s/+1/\\/g; s/+0/+/g'
 }
 
 strip_quotes() {
@@ -71,6 +62,10 @@ strip_quotes() {
   val="${val#[\"\']}"
   val="${val%[\"\']}"
   printf "%s" "$val"
+}
+
+space_to_underscore() {
+  printf "%s" "${1// /_}"
 }
 
 export -f validate_type
