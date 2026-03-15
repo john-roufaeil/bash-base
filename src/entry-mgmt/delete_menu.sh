@@ -1,5 +1,8 @@
 #!/bin/bash
 source ./entry-mgmt/find_PK.sh
+if [[ $? -ne 0 ]]; then
+  return 1
+fi
 
 # Show the row to be deleted
 header=$(awk -F'|' '{printf "%s|", $1}' "$CONNECTED_DB_PATH/.$TABLE" | sed 's/|$//')
